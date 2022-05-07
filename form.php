@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html>
 
 <head>
       <meta charset="UTF-8">
       <link rel="stylesheet" href="stiles.css">
-      <title>6Back_index</title>
+      <title>6Back_form</title>
       <style>
             .for {
                   border: 2px solid rgb(26, 18, 144);
