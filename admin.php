@@ -37,14 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             form {
 
                 border: 2px solid rgb(0, 128, 0);
-                font-size: x-large;
-                text-align: center;
+                font-size: medium;
                 max-width: auto;
+                text-align: center;
                 margin-top: 50px;
             }
 
             th {
-                margin-left: 15px;
+                margin: 15px;
                 border: 2px solid rgb(0, 128, 0);
             }
 
@@ -52,42 +52,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 margin: 15px;
                 border: 1px solid rgb(85, 85, 85);
             }
+
+            input,
+            label {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                font-size: medium;
+            }
         </style>
 
     </head>
 
     <body>
-        <div class="row row-cols-lg-2 g-2 ">
-            <table class="position-absolute top-0 start-0">
-                <div class="col-6 ">
-                    <!--ряд с ячейками заголовков-->
-                    <tr>
-                        <th>ID</th>
-                        <th>Имя</th>
-                        <th>email</th>
-                        <th>Дата рождения</th>
-                        <th>Пол</th>
-                        <th>Количество конечностей</th>
-                        <th>Сверхспособности</th>
-                        <th>Биография</th>
-                    </tr>
-
-                    <!-- ______________________________________________Заполнить таблицуданными из формы______________________ -->
-                    <?php
-                    $user = 'u47586';
-                    $pass = '3927785';
-                    $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
-                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    try {
-                        $sm = $db->prepare('SELECT * FROM `MainData`');
-                        $ss = $db->prepare('SELECT * FROM `Superpovers`'); // запрос данных пользователя
-                        $ss->execute();
-                        $sm->execute();
-                        // $maindata = $sm->fetchAll(PDO::FETCH_ASSOC);
-                        // $super = $ss->fetchAll(PDO::FETCH_ASSOC);
-                        while ($rowm = $sm->fetch()) {
-                            $rows = $ss->fetch();
-                            print("<tr><td>" . $rowm["id"] . "</td>
+        <div class="container col-10 p-4 ">
+            <div class="row ">
+                <!-- class="position-absolute top-0 start-0" -->
+                <div class="col-9 ">
+                    <table>
+                        <!--ряд с ячейками заголовков-->
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>email</th>
+                            <th>Дата рождения</th>
+                            <th>Пол</th>
+                            <th>Количество конечностей</th>
+                            <th>Сверхспособности</th>
+                            <th>Биография</th>
+                        </tr>
+                        <!-- ______________________________________________Заполнить таблицуданными из формы______________________ -->
+                        <?php
+                        $user = 'u47586';
+                        $pass = '3927785';
+                        $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        try {
+                            $sm = $db->prepare('SELECT * FROM `MainData`');
+                            $ss = $db->prepare('SELECT * FROM `Superpovers`'); // запрос данных пользователя
+                            $ss->execute();
+                            $sm->execute();
+                            // $maindata = $sm->fetchAll(PDO::FETCH_ASSOC);
+                            // $super = $ss->fetchAll(PDO::FETCH_ASSOC);
+                            while ($rowm = $sm->fetch()) {
+                                $rows = $ss->fetch();
+                                print("<tr><td>" . $rowm["id"] . "</td>
                                <td>" . $rowm["name"] . "</td>
                                <td>" . $rowm["email"] . "</td>
                                <td>" . $rowm["age"] . "</td>
@@ -95,16 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                <td>" . $rowm["numberOfLimb"] . "</td>
                                <td>" . $rows["superpower"] . "</td>
                                <td>" . $rowm["biography"] . "</td></tr>"
-                            );
+                                );
+                            }
+                        } catch (PDOException $e) {
+                            print('Error:' . $e->GetMessage());
+                            exit();
                         }
-                    } catch (PDOException $e) {
-                        print('Error:' . $e->GetMessage());
-                        exit();
-                    }
-                    ?>
+                        ?>
+                    </table>
                 </div>
                 <!-- ______________________________________________Редактировать данные______________________ -->
-                <div class="col-6 ">
+                <div class="col-3">
                     <form action="" method="POST">
                         <label> Выберите ID:<br />
                             <input name="id" value="" /></label><br />
@@ -113,43 +122,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                     <form action="" method="POST">
                         <label> Имя:<br />
-                            <input name="name" value="<?php print $values['name']; ?>" /></label><br />
+                            <input name="name" value="" /></label><br />
 
                         <label> e-mail:<br />
-                            <input name="email" value="<?php print $values['email']; ?>" type="email" /> </label><br />
+                            <input name="email" value="" type="email" /> </label><br />
 
-                        <label> Дата рождения:<br /><input name="date" value="<?php print $values['date']; ?>" type="date" /></label><br />
+                        <label> Дата рождения:<br /><input name="date" value="" type="date" /></label><br />
 
-                        Пол:<br />
-                        <label><input type="radio" <?php if (isset($values['gender']) && $values['gender'] == "m") print ' checked="checked"'; ?> checked="checked" name="gender" value="m" /> М</label>
-                        <label><input type="radio" <?php if (isset($values['gender']) && $values['gender'] == "w") print ' checked="checked"'; ?> name="gender" value="w" /> Ж</label><br />
+                        Пол:
+                        <label><input type="radio" checked="checked" name="gender" value="m" /> М</label>
+                        <label><input type="radio" name="gender" value="w" /> Ж</label><br />
 
                         Количество конечностей:<br />
-                        <label><input type="radio" <?php if (isset($values['hand']) && $values['hand'] == 1) print ' checked="checked"'; ?> checked="checked" name="hand" value="1" />1</label>
-                        <label><input type="radio" <?php if (isset($values['hand']) && $values['hand'] == 2) print ' checked="checked"'; ?> name="hand" value="2" /> 2</label>
-                        <label><input type="radio" <?php if (isset($values['hand']) && $values['hand'] == 3) print ' checked="checked"'; ?> name="hand" value="3" /> 3</label>
-                        <label><input type="radio" <?php if (isset($values['hand']) && $values['hand'] == 4) print ' checked="checked"'; ?> name="hand" value="4" /> 4</label>
-                        <label><input type="radio" <?php if (isset($values['hand']) && $values['hand'] == 5) print ' checked="checked"'; ?> name="hand" value="5" /> 5</label>
+                        <label><input type="radio" checked="checked" name="hand" value="1" />1</label>
+                        <label><input type="radio" name="hand" value="2" /> 2</label>
+                        <label><input type="radio" name="hand" value="3" /> 3</label>
+                        <label><input type="radio" name="hand" value="4" /> 4</label>
+                        <label><input type="radio" name="hand" value="5" /> 5</label>
+                        <br />
 
-                        <label>Сверхспособности:<br />
-                            <input name="Superpovers" value="<?php print $values['name']; ?>" /></label><br />
+                        <label> Сверхспособности:<br />
+                            <input name="Superpovers" value="" /></label><br />
 
                         <label>Биография:<br />
-                            <textarea name="biography"><?php print $values['biography']; ?></textarea>
+                            <textarea name="biography"></textarea>
                         </label><br />
-                        <br />
                         <input name="butt2" type="submit" value="Изменить" />
                         <!-- <input name="butt2" type="submit" value="Вход" /> -->
                         <input name="butt2" type="submit" value="Удалить" />
                     </form>
+
                 </div>
+            </div>
         </div>
-        </table>
     </body>
 
     </html>
 <?php
 } else {
-    
 }
 ?>
