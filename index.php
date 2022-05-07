@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $string = array(
   'exitlog1' => '<div class="for" style="color:green"> Выход выполнен.</div>',
   'exitlog2' => '<div class="for" style="color:green"> Вы не авторизованы.</div>',
-  'enterlog' => '<div class="for" style="color:green"> Ошибка входа.</div>',
+  'enterlog' => '<div class="for" style="color:red"> Ошибка входа.</div>',
   'enterlogerror' => '<div class="for" style="color:green"> заполните все поля.</div>',
   'registration' => '<div class="for" style="color:green"> Что бы начать регистрацию выйдете из аккаунта.</div>',
   'notexist' => '<div class="for" style="color:red"> Пользователь не существует!</div>',
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="stiles.css">
-    <title>6Back_login</title>
+    <title>6Back_index</title>
     <style>
       .for {
         border: 2px solid rgb(26, 18, 144);
@@ -172,4 +172,3 @@ else {
     }
   }
 }
-
