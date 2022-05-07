@@ -95,19 +95,21 @@ else {
     }
   if ($button == 2) //Регистрация
   {
-    if (isset($_COOKIE['all_OK'])) {
-      unset($_SESSION['uid']);
-      unset($_SESSION['login']);
-      session_destroy();
-      setcookie('all_OK', '', time() - 1000);
-      setcookie('login', '', time() - 1000);
-      setcookie('pass', '', time() - 1000);
-      header('Location: user.php');
+    // if (isset($_COOKIE['all_OK'])) {
+    //   unset($_SESSION['uid']);
+    //   unset($_SESSION['login']);
+    //   session_destroy();
+    //   setcookie('all_OK', '', time() - 1000);
+    //   setcookie('login', '', time() - 1000);
+    //   setcookie('pass', '', time() - 1000);
+    //   header('Location: user.php');
+    //   exit();
+    // } else {
+    //   header('Location: user.php');
+    //   exit();
+    // }
+    header('Location: user.php');
       exit();
-    } else {
-      header('Location: user.php');
-      exit();
-    }
   } else if ($button == 3) {//Админ
     if (isset($_COOKIE['all_OK'])) {
       unset($_SESSION['uid']);
