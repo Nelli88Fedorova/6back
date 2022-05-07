@@ -118,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <label> Выберите ID:<br />
                             <input name="id" value="" /></label><br />
                         <input name="butt1" type="submit" value="Выбрать" />
+                        <input name="butt1" type="submit" value="Удалить Все записи" />
                     </form>
 
                     <form action="" method="POST">
