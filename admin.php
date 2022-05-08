@@ -2,7 +2,7 @@
 //статистику по количеству пользователей с каждой сверхспособностью
 $coo = array(
     'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
-    'DELETESuperpovers1', 'DELETEMainData1'
+    'DELETESuperpovers1', 'DELETEMainData1','xman','xmanSuper', 'xmanUse', 'xmanData',
 );
 foreach ($coo as $name) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
 $user = 'u47586';
@@ -51,12 +51,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <style>
                 table,
                 form {
-
                     border: 2px solid rgb(0, 128, 0);
-                    font-size: medium;
                     max-width: auto;
                     text-align: center;
                     margin-top: 50px;
+                    margin-left: 10px;
+                }
+
+                form {
+                    font-size: large;
+                }
+
+                table {
+                    font-size: medium;
                 }
 
                 th {
@@ -68,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     margin: 15px;
                     border: 1px solid rgb(85, 85, 85);
                 }
+
                 input,
                 label {
                     margin-top: 5px;
@@ -75,24 +83,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     font-size: medium;
                     text-align: center;
                 }
-                .mes{
-                    color:rgb(230,126,34);
+
+                .mes {
+                    color: rgb(230, 126, 34);
                     text-align: center;
-                    font-size: medium;
+                    font-size: x-large;
                 }
             </style>
 
         </head>
 
         <body>
-            <div class="container col-10 p-4 ">
+            <div class="container-solid g-4">
                 <div class="row ">
                     <!-- class="position-absolute top-0 start-0" -->
-                    <div class="col-9 ">
+                    <div class="col-5">
                         <table>
                             <!--ряд с ячейками заголовков-->
                             <tr>
                                 <th>ID</th>
+                                <th>login</th>
                                 <th>Имя</th>
                                 <th>email</th>
                                 <th>Дата рождения</th>
@@ -108,21 +118,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             try {
                                 $sm = $db->prepare('SELECT * FROM `MainData`');
-                                $ss = $db->prepare('SELECT * FROM `Superpovers`'); // запрос данных пользователя
+                                $ss = $db->prepare('SELECT * FROM `Superpovers`');
+                                $su = $db->prepare('SELECT * FROM `users`');
                                 $ss->execute();
                                 $sm->execute();
-                                // $maindata = $sm->fetchAll(PDO::FETCH_ASSOC);
-                                // $super = $ss->fetchAll(PDO::FETCH_ASSOC);
+                                $su->execute();
                                 while ($rowm = $sm->fetch()) {
                                     $rows = $ss->fetch();
+                                    $rowu = $su->fetch();
                                     print("<tr><td>" . $rowm["id"] . "</td>
-                               <td>" . $rowm["name"] . "</td>
-                               <td>" . $rowm["email"] . "</td>
-                               <td>" . $rowm["age"] . "</td>
-                               <td>" . $rowm["gender"] . "</td>
-                               <td>" . $rowm["numberOfLimb"] . "</td>
-                               <td>" . $rows["superpower"] . "</td>
-                               <td>" . $rowm["biography"] . "</td></tr>"
+                                    <td>" . $rowu["login"] . "</td>
+                                    <td>" . $rowm["name"] . "</td>
+                                    <td>" . $rowm["email"] . "</td>
+                                    <td>" . $rowm["age"] . "</td>
+                                    <td>" . $rowm["gender"] . "</td>
+                                    <td>" . $rowm["numberOfLimb"] . "</td>
+                                    <td>" . $rows["superpower"] . "</td>
+                                    <td>" . $rowm["biography"] . "</td></tr>"
                                     );
                                 }
                             } catch (PDOException $e) {
@@ -132,8 +144,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                             ?>
                         </table>
                     </div>
-                    <!-- ______________________________________________Редактировать данные______________________ -->
-                    <div class="col-3">
+                    <!-- ______________________________________________Вывести данные mainData______________________ -->
+                    <div class="col-2">
                         <?php
                         foreach ($err as $n => $v) {
                             if (isset($mes[$n])) {
@@ -146,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <input name="id" value="<?php print $val['id']; ?>" /></label><br />
                             <input name="butt1" type="submit" value="Выбрать" />
                             <input name="butt1" type="submit" value="Удалить Все записи" />
+                            <input name="butt1" type="submit" value="Выйти" />
                         </form>
 
                         <form action="" method="POST">
@@ -180,6 +193,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         </form>
 
                     </div>
+                    <div class="col-2">
+                        <form action="" method="POST">
+                            <label> Выберите Суперспособность:<br />
+                                <label><input type="radio" checked="checked" name="xman" value="immortality" />Бессмертие</label>
+                                <label><input type="radio" name="xman" value="passing through walls" />Прохождение
+                                    сквозь
+                                    стены</label><br />
+                                <label><input type="radio" name="xman" value="levitation" />Левитация</label><br />
+                                <input name="butt3" type="submit" value="Найти" />
+                        </form>
+                    </div>
+
+                    <div class="col-3">
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>login</th>
+                                <th>Имя</th>
+                                <th>Сверхспособность</th>
+                            </tr>
+                            <!-- ______________________________________________Вывести данные mainData по Superpovers______________________ -->
+                            <?php
+                            if (isset($_COOKIE['xman'])) {
+                                $xman = $_COOKIE['xman'];
+                                setcookie('xman', '', time() - 1000);
+                                $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+                                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                try {
+                                    $s0 = $db->prepare('SELECT * FROM `Superpovers` WHERE `superpower` = ?');
+                                    $s0->execute(array($xman));
+                                    setcookie('xmanSuper', $s0->rowCount());
+                                    while ($super = $s0->fetch()) {
+                                        $su = $db->prepare('SELECT * FROM `users` WHERE `id` = ?');
+                                        $su->execute(array($super['id']));
+                                        setcookie('xmanUse', $su->rowCount());
+                                        $user = $su->fetch(PDO::FETCH_ASSOC);
+
+                                        $sm = $db->prepare('SELECT * FROM `MainData` WHERE `id` = ?');
+                                        $sm->execute(array($super['id']));
+                                        setcookie('xmanData', $sm->rowCount());
+                                        $data = $sm->fetch(PDO::FETCH_ASSOC);
+
+                                        print("<tr><td>" . $super["id"] . "</td>
+                                        <td>" . $user["login"] . "</td>
+                                        <td>" . $data["name"] . "</td>
+                                        <td>" . $super["superpower"] . "</td></tr>"
+                                        );
+                                    }
+                                } catch (PDOException $e) {
+                                    print('Error:' . $e->GetMessage());
+                                    exit();
+                                }
+                            }
+                            ?>
+                        </table>
+                    </div>
                 </div>
             </div>
         </body>
@@ -198,6 +267,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if (isset($_POST['butt1'])) { //Выбор по ID
 
+        if ($_POST['butt1'] == 'Выйти') {
+            unset($_SERVER['PHP_AUTH_USER']);
+            unset($_SERVER['PHP_AUTH_PW']);
+            header('Location: index.php');
+            exit();
+        } else
         if ($_POST['butt1'] == 'Выбрать') {
             try {
                 $sm = $db->prepare("SELECT * FROM MainData WHERE id = ?");
@@ -235,13 +310,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 print('Error:' . $e->GetMessage());
                 exit();
             }
-            setcookie('deletedAll',1);
+            setcookie('deletedAll', 1);
             header('Location: admin.php');
             exit();
         }
     } else if (isset($_POST['butt2'])) //Работа с 1 пользователем
     {
-        // $idf = $_POST['id'];
         if (empty($_COOKIE['id'])) { //Пустое поле ID
             setcookie('emptyID', 1);
             header('Location: admin.php');
@@ -291,11 +365,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     print('Error:' . $e->GetMessage());
                     exit();
                 }
-                setcookie('deletedOne',1);
+                setcookie('deletedOne', 1);
                 header('Location: admin.php');
                 exit();
             }
         }
+    } else if (isset($_POST['butt3'])) {
+        $xman = $_POST['xman'];
+        setcookie('xman', $xman);
+        header('Location: admin.php');
+        exit();
     }
 }
 ?>
