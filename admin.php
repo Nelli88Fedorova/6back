@@ -1,5 +1,5 @@
 <?php  //статистику по количеству пользователей с каждой сверхспособностью
-foreach ($_COOKIE as $name => $v) print('<br>' . $name . ': ' . $v . '</br>');
+foreach ($_COOKIE as $name => $v) print('<br>   ' . $name . ': ' . $v . '</br>');
 $user = 'u47586';
 $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
@@ -7,7 +7,6 @@ $val = array();
 foreach ($parametrs as $n) {
     if (isset($_COOKIE[$n])) {
         $val[$n] = $_COOKIE[$n];
-        setcookie($n, '', time() - 100);
     } else $val[$n] = '';
 }
 $err = array(
@@ -19,7 +18,7 @@ $mes = array();
 foreach ($err as $n => $v) {
     if (isset($_COOKIE[$n])) {
         $mes[$n] = $v;
-        setcookie($n, '', time() - 100);
+        setcookie($n, '', time() - 1000);
     } else $mes = '';
 }
 
@@ -188,21 +187,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
                 $sm = $db->prepare("SELECT * FROM MainData WHERE id = ?");
                 $sm->execute(array($idf));
+                setcookie('SELECTFROMMainData1',$sm->rowCount());
                 $mdata = $sm->fetch(PDO::FETCH_ASSOC);
                 if (empty($mdata)) {
                     setcookie('wrongID', 1);
                     header('Location: admin.php');
                     exit();
                 }
-                foreach ($parametrs as $name) {
-                    setcookie($name, $mdata[$name]);
-                }
+               
 
                 $ss = $db->prepare("SELECT * FROM Superpovers WHERE id = ?");
                 $ss->execute(array($idf));
+                setcookie('SELECTFROMSuperpovers1',$ss->rowCount());
                 $sdata = $ss->fetch(PDO::FETCH_ASSOC);
 
-                setcookie('superpower', $sdata['superpower']);
+                foreach ($parametrs as $name) {
+                    if($name=='superpower') setcookie('superpower', $sdata['superpower']);
+                    else setcookie($name, $mdata[$name]);
+                }
+                
             } catch (PDOException $e) {
                 print('Error:' . $e->GetMessage());
                 exit();
@@ -222,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     } else if (isset($_POST['butt2'])) //Работа с 1 пользователем
     {
-        $idf = $_POST['id'];
+        // $idf = $_POST['id'];
         if (empty($_POST['id'])) { //Пустое поле ID
             setcookie('emptyID', 1);
             header('Location: admin.php');
@@ -243,9 +246,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $stmt = $db->prepare("UPDATE MainData SET name =?, email =?, age=?, gender=?, numberOfLimb=?, biography=? WHERE id=?");
                     $stmt->execute(array($name, $email, $age, $gender, $numberOfLimb, $biography, $idf));
+                    setcookie('UPDATEMainData',$stmt->rowCount());
 
                     $super = $db->prepare("UPDATE Superpovers SET superpower=?  WHERE id=?");
                     $super->execute(array($syperpover, $idf));
+                    setcookie('UPDATESuperpovers',$super->rowCount());
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
@@ -258,10 +263,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $sth1 = $db->prepare("DELETE FROM users WHERE id = ?");
                     $sth1->execute(array($idf));
+                    setcookie('DELETEusers1',$sth1->rowCount());
                     $sth2 = $db->prepare("DELETE FROM Superpovers WHERE id = ?");
                     $sth2->execute(array($idf));
+                    setcookie('DELETESuperpovers1',$sth2->rowCount());
                     $sth3 = $db->prepare("DELETE FROM MainData WHERE id = ?");
                     $sth3->execute(array($idf));
+                    setcookie('DELETEMainData1',$sth3->rowCount());
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
