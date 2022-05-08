@@ -1,5 +1,7 @@
 <?php  //статистику по количеству пользователей с каждой сверхспособностью
-foreach ($_COOKIE as $name => $v) print('<br>   ' . $name . ': ' . $v . '</br>');
+$coo=array('SELECTFROMMainData1','SELECTFROMSuperpovers1','UPDATEMainData','UPDATESuperpovers','DELETEusers1',
+'DELETESuperpovers1','DELETEMainData1');
+foreach ($coo as $name) print('<th>   ' . $name . '= ' .$_COOKIE[$name] . '</th>');
 $user = 'u47586';
 $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
@@ -258,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     exit();
                 }
                 setcookie('change', 1,);
-                header('Location: admin.php');
+                header('Location: '.$_SERVER['REQUEST_URI']);
                 exit();
             } else if ($_POST['butt2'] == 'Удалить пользователя') //Удалить 1 запись
             {
