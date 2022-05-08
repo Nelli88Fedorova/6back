@@ -11,6 +11,9 @@ $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower','xman');
 $val = array();
 foreach ($parametrs as $n) {
+    if(isset($_COOKIE['xman']))
+    $val['xman'] = $_COOKIE['xman'];
+    else
     if (isset($_COOKIE[$n])) {
         $val[$n] = $_COOKIE[$n];
     } else $val[$n] = '';
