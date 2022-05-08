@@ -1,14 +1,14 @@
 <?php header('Content-Type: text/html; charset=UTF-8');
 //статистику по количеству пользователей с каждой сверхспособностью
-$coo = array(
-    'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
-    'DELETESuperpovers1', 'DELETEMainData1', 'xman', 'xmanSuper', 'xmanUse', 'xmanData',
-);
-foreach ($coo as $name) if (isset($_COOKIE[$name])) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
+// $coo = array(
+//     'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
+//     'DELETESuperpovers1', 'DELETEMainData1', 'xman', 'xmanSuper', 'xmanUse', 'xmanData',
+// );
+// foreach ($coo as $name) if (isset($_COOKIE[$name])) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
 
 $user = 'u47586';
 $pass = '3927785';
-$parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
+$parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower','xman');
 $val = array();
 foreach ($parametrs as $n) {
     if (isset($_COOKIE[$n])) {
@@ -176,15 +176,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                             <label> Дата рождения:<br /><input name="age" value="<?php print $val['age']; ?>" type="date" /></label><br />
 
                             Пол:
-                            <label><input type="radio" <?php if (isset($values['gender']) && $values['gender'] == "m") print ' checked="checked"'; ?> checked="checked" name="gender" value="m" /> М</label>
-                            <label><input type="radio" <?php if (isset($values['gender']) && $values['gender'] == "w") print ' checked="checked"'; ?> name="gender" value="w" /> Ж</label><br />
+                            <label><input type="radio" <?php if (isset($val['gender']) && $val['gender'] == "m") print ' checked="checked"'; ?> checked="checked" name="gender" value="m" /> М</label>
+                            <label><input type="radio" <?php if (isset($val['gender']) && $val['gender'] == "w") print ' checked="checked"'; ?> name="gender" value="w" /> Ж</label><br />
 
                             Количество конечностей:<br />
-                            <label><input type="radio" <?php if (isset($values['numberOfLimb']) && $values['numberOfLimb'] == 1) print ' checked="checked"'; ?> checked="checked" name="numberOfLimb" value="1" />1</label>
-                            <label><input type="radio" <?php if (isset($values['numberOfLimb']) && $values['numberOfLimb'] == 2) print ' checked="checked"'; ?> name="numberOfLimb" value="2" /> 2</label>
-                            <label><input type="radio" <?php if (isset($values['numberOfLimb']) && $values['numberOfLimb'] == 3) print ' checked="checked"'; ?> name="numberOfLimb" value="3" /> 3</label>
-                            <label><input type="radio" <?php if (isset($values['numberOfLimb']) && $values['numberOfLimb'] == 4) print ' checked="checked"'; ?> name="numberOfLimb" value="4" /> 4</label>
-                            <label><input type="radio" <?php if (isset($values['numberOfLimb']) && $values['numberOfLimb'] == 5) print ' checked="checked"'; ?> name="numberOfLimb" value="5" /> 5</label>
+                            <label><input type="radio" <?php if (isset($val['numberOfLimb']) && $val['numberOfLimb'] == 1) print ' checked="checked"'; ?> checked="checked" name="numberOfLimb" value="1" />1</label>
+                            <label><input type="radio" <?php if (isset($val['numberOfLimb']) && $val['numberOfLimb'] == 2) print ' checked="checked"'; ?> name="numberOfLimb" value="2" /> 2</label>
+                            <label><input type="radio" <?php if (isset($val['numberOfLimb']) && $val['numberOfLimb'] == 3) print ' checked="checked"'; ?> name="numberOfLimb" value="3" /> 3</label>
+                            <label><input type="radio" <?php if (isset($val['numberOfLimb']) && $val['numberOfLimb'] == 4) print ' checked="checked"'; ?> name="numberOfLimb" value="4" /> 4</label>
+                            <label><input type="radio" <?php if (isset($val['numberOfLimb']) && $val['numberOfLimb'] == 5) print ' checked="checked"'; ?> name="numberOfLimb" value="5" /> 5</label>
 
                             <label> Сверхспособности:<br />
                                 <input name="superpower" value="<?php print $val['superpower']; ?>" /></label><br />
@@ -201,11 +201,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <div class="col-2">
                         <form action="" method="POST">
                             <label> Выберите Суперспособность:<br />
-                                <label><input type="radio" checked="checked" name="xman" value="immortality" />Бессмертие</label>
-                                <label><input type="radio" name="xman" value="passing through walls" />Прохождение
-                                    сквозь
-                                    стены</label><br />
-                                <label><input type="radio" name="xman" value="levitation" />Левитация</label><br />
+                                <label><input type="radio" <?php if (isset($val['xman']) && $val['xman'] == "immortality") print ' checked="checked"'; ?> checked="checked" name="xman" value="immortality" />Бессмертие</label>
+                                <label><input type="radio" <?php if (isset($val['xman']) && $val['xman'] == "passing through walls") print ' checked="checked"'; ?> name="xman" value="passing through walls" />Прохождение сквозь стены</label><br />
+                                <label><input type="radio" <?php if (isset($val['xman']) && $val['xman'] == "levitation") print ' checked="checked"'; ?> name="xman" value="levitation" />Левитация</label><br />
                                 <input name="butt3" type="submit" value="Найти" />
                         </form>
                     </div>
