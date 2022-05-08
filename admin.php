@@ -8,16 +8,16 @@
 
 $user = 'u47586';
 $pass = '3927785';
-$parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower','xman');
+$parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
 $val = array();
 foreach ($parametrs as $n) {
-    if($n =='xman' && isset($_COOKIE['xman']))
-    $val['xman'] = $_COOKIE['xman'];
-    else
     if (isset($_COOKIE[$n])) {
         $val[$n] = $_COOKIE[$n];
     } else $val[$n] = '';
 }
+if(isset($_COOKIE['xman']))
+    $val['xman'] = $_COOKIE['xman'];
+    
 $err = array(
     'wrongID' => '<div class="mes">Нет пользователя с таким ID.</div>',
     'emptyID' => '<div class="mes">Заполните поле ID.</div>',
