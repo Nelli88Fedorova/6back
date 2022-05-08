@@ -2,9 +2,10 @@
 //статистику по количеству пользователей с каждой сверхспособностью
 $coo = array(
     'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
-    'DELETESuperpovers1', 'DELETEMainData1','xman','xmanSuper', 'xmanUse', 'xmanData',
+    'DELETESuperpovers1', 'DELETEMainData1', 'xman', 'xmanSuper', 'xmanUse', 'xmanData',
 );
-foreach ($coo as $name) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
+foreach ($coo as $name) if (isset($_COOKIE[$name])) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
+
 $user = 'u47586';
 $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
@@ -96,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <body>
             <div class="container-solid g-4">
                 <div class="row ">
-                    <!-- class="position-absolute top-0 start-0" -->
                     <div class="col-5">
                         <table>
                             <!--ряд с ячейками заголовков-->
@@ -217,22 +217,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                             <?php
                             if (isset($_COOKIE['xman'])) {
                                 $xman = $_COOKIE['xman'];
-                                setcookie('xman', '', time() - 1000);
+                                //setcookie('xman', '', time() - 1000);
                                 $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
                                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                                 try {
                                     $s0 = $db->prepare('SELECT * FROM `Superpovers` WHERE `superpower` = ?');
                                     $s0->execute(array($xman));
-                                    setcookie('xmanSuper', $s0->rowCount());
+                                    //setcookie('xmanSuper', $s0->rowCount());
                                     while ($super = $s0->fetch()) {
                                         $su = $db->prepare('SELECT * FROM `users` WHERE `id` = ?');
                                         $su->execute(array($super['id']));
-                                        setcookie('xmanUse', $su->rowCount());
+                                        //setcookie('xmanUse', $su->rowCount());
                                         $user = $su->fetch(PDO::FETCH_ASSOC);
 
                                         $sm = $db->prepare('SELECT * FROM `MainData` WHERE `id` = ?');
                                         $sm->execute(array($super['id']));
-                                        setcookie('xmanData', $sm->rowCount());
+                                        //setcookie('xmanData', $sm->rowCount());
                                         $data = $sm->fetch(PDO::FETCH_ASSOC);
 
                                         print("<tr><td>" . $super["id"] . "</td>
