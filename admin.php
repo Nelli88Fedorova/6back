@@ -101,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <table>
                             <!--ряд с ячейками заголовков-->
                             <tr>
+                                <th>№</th>
                                 <th>ID</th>
                                 <th>login</th>
                                 <th>Имя</th>
@@ -123,10 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 $ss->execute();
                                 $sm->execute();
                                 $su->execute();
+
+                                $nom=1;
                                 while ($rowm = $sm->fetch()) {
                                     $rows = $ss->fetch();
                                     $rowu = $su->fetch();
-                                    print("<tr><td>" . $rowm["id"] . "</td>
+                                    print("<tr><td>" . $nom . "</td>
+                                    <td>" . $rowm["id"] . "</td>
                                     <td>" . $rowu["login"] . "</td>
                                     <td>" . $rowm["name"] . "</td>
                                     <td>" . $rowm["email"] . "</td>
@@ -136,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                     <td>" . $rows["superpower"] . "</td>
                                     <td>" . $rowm["biography"] . "</td></tr>"
                                     );
+                                    $nom++;
                                 }
                             } catch (PDOException $e) {
                                 print('Error:' . $e->GetMessage());
@@ -208,6 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <div class="col-3">
                         <table>
                             <tr>
+                                <th>№</th>
                                 <th>ID</th>
                                 <th>login</th>
                                 <th>Имя</th>
@@ -217,29 +223,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                             <?php
                             if (isset($_COOKIE['xman'])) {
                                 $xman = $_COOKIE['xman'];
-                                //setcookie('xman', '', time() - 1000);
                                 $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
                                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                                 try {
                                     $s0 = $db->prepare('SELECT * FROM `Superpovers` WHERE `superpower` = ?');
                                     $s0->execute(array($xman));
-                                    //setcookie('xmanSuper', $s0->rowCount());
+
+                                    $nomer = 1;
                                     while ($super = $s0->fetch()) {
                                         $su = $db->prepare('SELECT * FROM `users` WHERE `id` = ?');
                                         $su->execute(array($super['id']));
-                                        //setcookie('xmanUse', $su->rowCount());
                                         $user = $su->fetch(PDO::FETCH_ASSOC);
 
                                         $sm = $db->prepare('SELECT * FROM `MainData` WHERE `id` = ?');
                                         $sm->execute(array($super['id']));
-                                        //setcookie('xmanData', $sm->rowCount());
                                         $data = $sm->fetch(PDO::FETCH_ASSOC);
 
-                                        print("<tr><td>" . $super["id"] . "</td>
+                                        print("<tr><td>" . $nomer . "</td>
+                                        <td>" . $super["id"] . "</td>
                                         <td>" . $user["login"] . "</td>
                                         <td>" . $data["name"] . "</td>
                                         <td>" . $super["superpower"] . "</td></tr>"
                                         );
+                                        $nomer++;
                                     }
                                 } catch (PDOException $e) {
                                     print('Error:' . $e->GetMessage());
