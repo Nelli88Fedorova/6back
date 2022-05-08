@@ -8,6 +8,12 @@ foreach ($coo as $name) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th
 $user = 'u47586';
 $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
+$val = array();
+foreach ($parametrs as $n) {
+    if (isset($_COOKIE[$n])) {
+        $val[$n] = $_COOKIE[$n];
+    } else $val[$n] = '';
+}
 $err = array(
     'wrongID' => '<div class="mes">Нет пользователя с таким ID.</div>',
     'emptyID' => '<div class="mes">Заполните поле ID.</div>',
@@ -15,8 +21,14 @@ $err = array(
     'deletedOne' => '<div class="mes">Данные пользователя удалены.</div>',
     'deletedAll' => '<div class="mes">Данные удалены.</div>',
 );
-$val = array();
 $mes = array();
+foreach ($err as $n => $v) {
+    if (isset($_COOKIE[$n])) {
+        $mes[$n] = $v;
+        setcookie($n, '', time() - 1000);
+    } else $mes[$n] = '';
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -26,18 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         print('<h1>401 Требуется авторизация</h1>');
         exit();
     } else {
-        foreach ($parametrs as $n) {
-            if (isset($_COOKIE[$n])) {
-                $val[$n] = $_COOKIE[$n];
-            } else $val[$n] = '';
-        }
-        foreach ($err as $n => $v) {
-            if (isset($_COOKIE[$n])) {
-                $mes[$n] = $v;
-                setcookie($n, '', time() - 1000);
-            } else $mes = '';
-        }
-
 
 ?>
         <!DOCTYPE html>
@@ -223,6 +223,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 print('Error:' . $e->GetMessage());
                 exit();
             }
+            header('Location: admin.php');
+            exit();
         } else if ($_POST['butt1'] == 'Удалить Все записи') //Удалить все данные
         {
             try {
