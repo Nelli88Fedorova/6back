@@ -1,10 +1,4 @@
 <?php header('Content-Type: text/html; charset=UTF-8');
-//статистику по количеству пользователей с каждой сверхспособностью
-// $coo = array(
-//     'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
-//     'DELETESuperpovers1', 'DELETEMainData1', 'xman', 'xmanSuper', 'xmanUse', 'xmanData',
-// );
-// foreach ($coo as $name) if (isset($_COOKIE[$name])) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
 
 $user = 'u47586';
 $pass = '3927785';
@@ -15,9 +9,9 @@ foreach ($parametrs as $n) {
         $val[$n] = $_COOKIE[$n];
     } else $val[$n] = '';
 }
-if(isset($_COOKIE['xman']))
+if (isset($_COOKIE['xman']))
     $val['xman'] = $_COOKIE['xman'];
-    
+
 $err = array(
     'wrongID' => '<div class="mes">Нет пользователя с таким ID.</div>',
     'emptyID' => '<div class="mes">Заполните поле ID.</div>',
@@ -89,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 }
 
                 .mes {
-                    color: rgb(230, 126, 34);
+                    color: rgb(25, 69, 0);
                     text-align: center;
                     font-size: x-large;
                 }
@@ -128,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 $sm->execute();
                                 $su->execute();
 
-                                $nom=1;
+                                $nom = 1;
                                 while ($rowm = $sm->fetch()) {
                                     $rows = $ss->fetch();
                                     $rowu = $su->fetch();
@@ -196,7 +190,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <textarea name="biography"><?php print $val['biography']; ?></textarea>
                             </label><br />
                             <input name="butt2" type="submit" value="Изменить" />
-                            <!-- <input name="butt2" type="submit" value="Вход" /> -->
                             <input name="butt2" type="submit" value="Удалить пользователя" />
                         </form>
 
@@ -284,7 +277,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
                 $sm = $db->prepare("SELECT * FROM MainData WHERE id = ?");
                 $sm->execute(array($idf));
-                setcookie('SELECTFROMMainData1', $sm->rowCount());
                 $mdata = $sm->fetch(PDO::FETCH_ASSOC);
                 if (empty($mdata)) {
                     setcookie('wrongID', 1);
@@ -294,7 +286,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                 $ss = $db->prepare("SELECT * FROM Superpovers WHERE id = ?");
                 $ss->execute(array($idf));
-                setcookie('SELECTFROMSuperpovers1', $ss->rowCount());
                 $sdata = $ss->fetch(PDO::FETCH_ASSOC);
 
                 foreach ($parametrs as $name) {
@@ -344,11 +335,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $stmt = $db->prepare("UPDATE MainData SET name =?, email =?, age=?, gender=?, numberOfLimb=?, biography=? WHERE id=?");
                     $stmt->execute(array($name, $email, $age, $gender, $numberOfLimb, $biography, $idf));
-                    setcookie('UPDATEMainData', $stmt->rowCount());
+                    
 
                     $super = $db->prepare("UPDATE Superpovers SET superpower=?  WHERE id=?");
                     $super->execute(array($syperpover, $idf));
-                    setcookie('UPDATESuperpovers', $super->rowCount());
+                    
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
@@ -361,13 +352,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $sth1 = $db->prepare("DELETE FROM users WHERE id = ?");
                     $sth1->execute(array($idf));
-                    setcookie('DELETEusers1', $sth1->rowCount());
+
                     $sth2 = $db->prepare("DELETE FROM Superpovers WHERE id = ?");
                     $sth2->execute(array($idf));
-                    setcookie('DELETESuperpovers1', $sth2->rowCount());
+                    
                     $sth3 = $db->prepare("DELETE FROM MainData WHERE id = ?");
                     $sth3->execute(array($idf));
-                    setcookie('DELETEMainData1', $sth3->rowCount());
+                    
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
