@@ -195,7 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     exit();
                 }
                
-
                 $ss = $db->prepare("SELECT * FROM Superpovers WHERE id = ?");
                 $ss->execute(array($idf));
                 setcookie('SELECTFROMSuperpovers1',$ss->rowCount());
@@ -226,11 +225,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else if (isset($_POST['butt2'])) //Работа с 1 пользователем
     {
         // $idf = $_POST['id'];
-        if (empty($_POST['id'])) { //Пустое поле ID
+        if (empty($_COOKIE['id'])) { //Пустое поле ID
             setcookie('emptyID', 1);
             header('Location: admin.php');
             exit();
-        } else {
+        } else { $idf=$_COOKIE['id'];
             $p = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'superpower');
             $name = $_POST['name'];
             $email = $_POST['email'];
