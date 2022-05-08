@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     margin: 15px;
                     border: 1px solid rgb(85, 85, 85);
                 }
-
+                label{font-weight: bolder; }
                 input,
                 label {
                     margin-top: 5px;
