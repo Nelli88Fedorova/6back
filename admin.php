@@ -176,8 +176,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <?php
     }
 } else {
-    $idf = $_POST['id'];
-    if (isset($_POST['id'])) setcookie('id', $_POST['id']);
+    $idf;
+    if (isset($_POST['id'])) {
+        setcookie('id', $_POST['id']);
+        $idf = $_POST['id'];
+    }
 
     $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -187,24 +190,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
                 $sm = $db->prepare("SELECT * FROM MainData WHERE id = ?");
                 $sm->execute(array($idf));
-                setcookie('SELECTFROMMainData1',$sm->rowCount());
+                setcookie('SELECTFROMMainData1', $sm->rowCount());
                 $mdata = $sm->fetch(PDO::FETCH_ASSOC);
                 if (empty($mdata)) {
                     setcookie('wrongID', 1);
                     header('Location: admin.php');
                     exit();
                 }
-               
+
                 $ss = $db->prepare("SELECT * FROM Superpovers WHERE id = ?");
                 $ss->execute(array($idf));
-                setcookie('SELECTFROMSuperpovers1',$ss->rowCount());
+                setcookie('SELECTFROMSuperpovers1', $ss->rowCount());
                 $sdata = $ss->fetch(PDO::FETCH_ASSOC);
 
                 foreach ($parametrs as $name) {
-                    if($name=='superpower') setcookie('superpower', $sdata['superpower']);
+                    if ($name == 'superpower') setcookie('superpower', $sdata['superpower']);
                     else setcookie($name, $mdata[$name]);
                 }
-                
             } catch (PDOException $e) {
                 print('Error:' . $e->GetMessage());
                 exit();
@@ -229,7 +231,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             setcookie('emptyID', 1);
             header('Location: admin.php');
             exit();
-        } else { $idf=$_COOKIE['id'];
+        } else {
+            $idf = $_COOKIE['id'];
             $p = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'superpower');
             $name = $_POST['name'];
             $email = $_POST['email'];
@@ -237,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $gender = $_POST['gender'];
             $numberOfLimb = $_POST['numberOfLimb'];
             $biography = $_POST['biography'];
-            $syperpover = implode(',', $_POST['superpower']);
+            $syperpover = $_POST['superpower'];
 
             if ($_POST['butt2'] == 'Изменить') {
                 $db = new PDO('mysql:host=localhost;dbname=u47586', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
@@ -245,11 +248,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $stmt = $db->prepare("UPDATE MainData SET name =?, email =?, age=?, gender=?, numberOfLimb=?, biography=? WHERE id=?");
                     $stmt->execute(array($name, $email, $age, $gender, $numberOfLimb, $biography, $idf));
-                    setcookie('UPDATEMainData',$stmt->rowCount());
+                    setcookie('UPDATEMainData', $stmt->rowCount());
 
                     $super = $db->prepare("UPDATE Superpovers SET superpower=?  WHERE id=?");
                     $super->execute(array($syperpover, $idf));
-                    setcookie('UPDATESuperpovers',$super->rowCount());
+                    setcookie('UPDATESuperpovers', $super->rowCount());
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
@@ -262,13 +265,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 try {
                     $sth1 = $db->prepare("DELETE FROM users WHERE id = ?");
                     $sth1->execute(array($idf));
-                    setcookie('DELETEusers1',$sth1->rowCount());
+                    setcookie('DELETEusers1', $sth1->rowCount());
                     $sth2 = $db->prepare("DELETE FROM Superpovers WHERE id = ?");
                     $sth2->execute(array($idf));
-                    setcookie('DELETESuperpovers1',$sth2->rowCount());
+                    setcookie('DELETESuperpovers1', $sth2->rowCount());
                     $sth3 = $db->prepare("DELETE FROM MainData WHERE id = ?");
                     $sth3->execute(array($idf));
-                    setcookie('DELETEMainData1',$sth3->rowCount());
+                    setcookie('DELETEMainData1', $sth3->rowCount());
                 } catch (PDOException $e) {
                     print('Error:' . $e->GetMessage());
                     exit();
