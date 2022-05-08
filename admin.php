@@ -1,28 +1,22 @@
-<?php  //статистику по количеству пользователей с каждой сверхспособностью
-$coo=array('SELECTFROMMainData1','SELECTFROMSuperpovers1','UPDATEMainData','UPDATESuperpovers','DELETEusers1',
-'DELETESuperpovers1','DELETEMainData1');
-foreach ($coo as $name) print('<th>   ' . $name . '= ' .$_COOKIE[$name] . '</th>');
+<?php header('Content-Type: text/html; charset=UTF-8');
+//статистику по количеству пользователей с каждой сверхспособностью
+$coo = array(
+    'SELECTFROMMainData1', 'SELECTFROMSuperpovers1', 'UPDATEMainData', 'UPDATESuperpovers', 'DELETEusers1',
+    'DELETESuperpovers1', 'DELETEMainData1'
+);
+foreach ($coo as $name) print('<th>   ' . $name . '= ' . $_COOKIE[$name] . '</th>');
 $user = 'u47586';
 $pass = '3927785';
 $parametrs = array('name', 'email', 'age', 'gender', 'numberOfLimb', 'biography', 'id', 'superpower');
-$val = array();
-foreach ($parametrs as $n) {
-    if (isset($_COOKIE[$n])) {
-        $val[$n] = $_COOKIE[$n];
-    } else $val[$n] = '';
-}
 $err = array(
     'wrongID' => '<div class="mes">Нет пользователя с таким ID.</div>',
     'emptyID' => '<div class="mes">Заполните поле ID.</div>',
     'change' => '<div class="mes">Данные изменены.</div>',
+    'deletedOne' => '<div class="mes">Данные пользователя удалены.</div>',
+    'deletedAll' => '<div class="mes">Данные удалены.</div>',
 );
+$val = array();
 $mes = array();
-foreach ($err as $n => $v) {
-    if (isset($_COOKIE[$n])) {
-        $mes[$n] = $v;
-        setcookie($n, '', time() - 1000);
-    } else $mes = '';
-}
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -32,6 +26,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         print('<h1>401 Требуется авторизация</h1>');
         exit();
     } else {
+        foreach ($parametrs as $n) {
+            if (isset($_COOKIE[$n])) {
+                $val[$n] = $_COOKIE[$n];
+            } else $val[$n] = '';
+        }
+        foreach ($err as $n => $v) {
+            if (isset($_COOKIE[$n])) {
+                $mes[$n] = $v;
+                setcookie($n, '', time() - 1000);
+            } else $mes = '';
+        }
+
 
 ?>
         <!DOCTYPE html>
@@ -62,13 +68,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     margin: 15px;
                     border: 1px solid rgb(85, 85, 85);
                 }
-
                 input,
                 label {
                     margin-top: 5px;
                     margin-bottom: 5px;
                     font-size: medium;
                     text-align: center;
+                }
+                .mes{
+                    color:rgb(230,126,34);
+                    text-align: center;
+                    font-size: medium;
                 }
             </style>
 
@@ -223,6 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 print('Error:' . $e->GetMessage());
                 exit();
             }
+            setcookie('deletedAll',1);
             header('Location: admin.php');
             exit();
         }
@@ -260,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     exit();
                 }
                 setcookie('change', 1,);
-                header('Location: '.$_SERVER['REQUEST_URI']);
+                header('Location: ' . $_SERVER['REQUEST_URI']);
                 exit();
             } else if ($_POST['butt2'] == 'Удалить пользователя') //Удалить 1 запись
             {
@@ -278,6 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     print('Error:' . $e->GetMessage());
                     exit();
                 }
+                setcookie('deletedOne',1);
                 header('Location: admin.php');
                 exit();
             }
