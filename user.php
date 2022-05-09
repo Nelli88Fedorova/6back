@@ -180,9 +180,11 @@ else {
       // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
       if (isset($_SESSION['login'])) {
 
+
         $update;
         $request = array();
         $data;
+        $su;
         $id;
         $form = array(
           'name' => $name,
@@ -208,6 +210,10 @@ else {
           $sth2 = $db->prepare("SELECT * FROM MainData WHERE id = ?"); // запрос данных пользователя
           $sth2->execute(array($id['id']));
           $data = $sth2->fetch(PDO::FETCH_ASSOC);
+
+          $s0 = $db->prepare('SELECT * FROM `Superpovers` WHERE `id` = ?');
+          $s0->execute(array($id['id']));
+          $su = $s0->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
           print('Error:' . $e->GetMessage());
           exit();
@@ -216,6 +222,8 @@ else {
         foreach ($parametrs2 as $name => $v) {
           if ($data[$v] != $form[$v]) $update[$v] = 1;
         }
+        if ($su['superpower'] != $superpover) $update['superpower'] = 1;
+
         if (empty($update)) {
           setcookie('thesame', 1);
           header('Location: user.php'); //Нет изменений в данных
@@ -274,9 +282,7 @@ else {
         exit();
       }
     }
-  }
-  else if($onind == 1)
-  {
+  } else if ($onind == 1) {
     if (isset($_SESSION['login'])) {
       unset($_SESSION['uid']);
       unset($_SESSION['login']);
