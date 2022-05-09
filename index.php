@@ -108,7 +108,7 @@ else {
       header('Location: user.php');
       exit();
     }
-  } else if ($button == 3) {//Админ
+  } else if ($button == 3) { //Админ
     if (isset($_COOKIE['all_OK'])) {
       unset($_SESSION['uid']);
       unset($_SESSION['login']);
@@ -125,6 +125,7 @@ else {
   } else
   if ($button == 1) //Вход
   {
+    $value;
     if (!empty($loginu) && !empty($passu)) {
       //  Проверть есть ли такой логин и пароль в базе данных.
       //вход в БД
@@ -149,14 +150,13 @@ else {
         header('Location: index.php');
         exit();
       } else
-      // if (MD5($passu)!==$value['pass']) {
-      //   setcookie('wrong',1);
-      //   setcookie('pass',1,time()-100);
-      //   setcookie('pass',$passu);
-      //   header('Location: index.php');
-      //   exit();
-      // } else
-      { //Если все ок, то авторизуем пользователя.
+      if (!empty($passu) && md5($passu) != $value['pass']) {
+        setcookie('wrong', 1);
+        setcookie('pass', 1, time() - 100);
+        setcookie('pass', $passu);
+        header('Location: index.php');
+        exit();
+      } else { //Если все ок, то авторизуем пользователя.
         setcookie('all_OK', 1);
         session_start();
         $_SESSION['login'] = $loginu;
