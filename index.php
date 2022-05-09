@@ -135,7 +135,7 @@ else {
       $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       //поиск соответствующего логина
       try {
-        $sth = $db->prepare("SELECT '*' FROM `users` WHERE `login` = ?");
+        $sth = $db->prepare("SELECT * FROM `users` WHERE `login` = ?");
         $sth->execute(array($loginu));
         $value = $sth->fetch(PDO::FETCH_ASSOC);
       } catch (PDOException $e) {
